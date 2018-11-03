@@ -14,7 +14,7 @@ class personnage:
     def __repr__(self):
         susp = "-suspect" if self.suspect else "-clean"
         return self.couleur + "-" + str(self.position) + susp
-            
+
 class joueur:
     def __init__(self,n):
         self.numero = n
