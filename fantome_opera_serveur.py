@@ -16,19 +16,23 @@ def message(texte,jos):
         f.close()
 
 def informer(texte):
+    print(texte)
     message(texte,joueurs)
 
 def demander(q,j):
+    waiting_answer = True
     informer("QUESTION : "+q)
-    f = open("./"+str(j.numero)+"/questions"+".txt","w")
-    f.write(q)
-    f.close()
+    with open("./"+str(j.numero)+"/questions"+".txt","w") as f:
+        f.write(q)
     sleep(latence)
-    f = open("./"+str(j.numero)+"/reponses"+".txt","r")
-    r = f.read()
-    f.close()
-    informer("REPONSE DONNEE : "+r)
-    return r
+    while waiting_answer:
+        with open("./"+str(j.numero)+"/reponses"+".txt","r") as f:
+            answer = f.read()
+            if answer:
+                waiting_answer = False
+        sleep(0.1)
+    informer("REPONSE DONNEE : " + answer)
+    return answer
 
 class personnage:
     def __init__(self,couleur):
