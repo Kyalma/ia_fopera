@@ -1,4 +1,5 @@
 from game import characters
+from parser import 
 
 class   Joueur():
     def __init__(self, id):
