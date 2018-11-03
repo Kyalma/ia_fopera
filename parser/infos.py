@@ -30,10 +30,10 @@ def current_turn_infos(role):
     for sub in subs_current:
         for line in sub.split('\n'):
             if line.startswith("NOUVEAU PLACEMENT : "):
-                nouveau_placement = line[20:]
+                new_pos = line[20:]
                 for i, suspect in enumerate(status):
-                    if suspect.startswith(nouveau_placement[:nouveau_placement.find('-')]):
-                        status[i] = nouveau_placement
+                    if suspect.startswith(new_pos[:new_pos.find('-')]):
+                        status[i] = new_pos
             # Add new features here for parsing each turn
     return events, status
 
