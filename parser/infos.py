@@ -1,3 +1,4 @@
+import re
 import game.characters as characters
 
 suspects = {
@@ -17,13 +18,20 @@ def ghost_color():
     *__ , color = data.split()
     print(f"Le fantome est {color}")
 
+def parse_events(events):
+    tour = int(re.findall("Tour:([0-9]+),", events)[0])
+    score = int(re.findall("Score:([0-9]+)/", events)[0])
+    ombre = int(re.findall("Ombre:([0-9]),", events)[0])
+    bloque = tuple(int(pos) for pos in re.findall("Bloque:{([0-9]), ([0-9])}", events)[0])
+    return tour, score, ombre, bloque
+
 def current_turn_infos(role):
     with open(f'{role}/infos.txt', 'r') as fhandler:
         turns = fhandler.read().split('**************************\n')
     if role == 0:
         turns.pop(0)
     current_turn = turns[-1].split('\n')
-    events = current_turn[0]
+    events = parse_events(current_turn[0])
     status = current_turn[1].split()
     subs_current = turns[-1].split('****\n')
     subs_current.pop(0)
