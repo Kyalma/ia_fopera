@@ -7,6 +7,6 @@ class   Fantome(Joueur):
         self.color = None
 
     def lancer(self):
-        self.color = ghost_color()
-        print("Fantome debug: Je suis " + self.color)
-        pass
+        while not self.game_over:
+            self.color = ghost_color()
+            print("Fantome debug: Je suis " + self.color)

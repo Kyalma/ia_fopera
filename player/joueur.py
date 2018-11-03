@@ -2,6 +2,7 @@ from game import characters
 
 class   Joueur():
     def __init__(self, id):
+        self.game_over = False
         self.id = id
         self.suspects = {
             'marron': characters.Brown(),

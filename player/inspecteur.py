@@ -6,8 +6,9 @@ class   Inspecteur(Joueur):
         Joueur.__init__(self, 0)
 
     def lancer(self):
-        events, status = current_turn_infos(self.id)
-        print(events)
-        print(status)
-        for suspect in status:
-            self.suspects[suspect[:suspect.find('-')]].update(suspect)
+        while not self.game_over:
+            events, status = current_turn_infos(self.id)
+            print(events)
+            print(status)
+            for suspect in status:
+                self.suspects[suspect[:suspect.find('-')]].update(suspect)
