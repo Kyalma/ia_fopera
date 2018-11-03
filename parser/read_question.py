@@ -1,5 +1,6 @@
-from enum import Enum 
 import os
+from time import sleep
+from enum import Enum
 
 class TYPE(Enum):
     POWER = 0
@@ -15,10 +16,13 @@ class Question:
         self.type = None
         self.args = None
         self.isEmpty = False
-    def read(self):
-        if os.stat(self.file).st_size == 0:
+    def read(self, wait=True):
+        while os.stat(self.file).st_size == 0:
             self.isEmpty = True
-            return
+            if not wait:
+                return
+            sleep(0.01)
+        self.isEmpty = False
         with open(self.file, 'r') as filehandler:
             data = filehandler.read()
         qdata = data.split()
