@@ -2,6 +2,8 @@ from random import shuffle,randrange
 from time import sleep
 from threading import Thread
 import dummy0, dummy1
+from player.inspecteur import Inspecteur
+from player.fantome import Fantome
 
 latence = 0.01
 permanents, deux, avant, apres = {'rose'}, {'rouge','gris','bleu'}, {'violet','marron'}, {'noir','blanc'}
@@ -189,7 +191,10 @@ class partie:
     def __repr__(self):
         return "Tour:" + str(self.num_tour) + ", Score:"+str(self.start)+"/"+str(self.end) + ", Ombre:" + str(self.shadow) + ", Bloque:" + str(self.bloque) +"\n" + "  ".join([str(p) for p in self.personnages])
 
-joueurs = [joueur(0),joueur(1)]
-Thread(target=dummy0.lancer).start()
-Thread(target=dummy1.lancer).start()
-partie(joueurs).lancer()
+if __name__ == "__main__":
+    joueurs = [joueur(0),joueur(1)]
+    inspecteur0 = Inspecteur()
+    fantome1 = Fantome()
+    Thread(target=inspecteur0.lancer).start()
+    Thread(target=fantome1.lancer).start()
+    partie(joueurs).lancer()
