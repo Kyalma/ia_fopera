@@ -1,4 +1,5 @@
 from enum import Enum 
+import os
 
 class TYPE(Enum):
     POWER = 0
@@ -13,7 +14,11 @@ class Question:
         self.file = file
         self.type = None
         self.args = None
+        self.isEmpty = False
     def read(self):
+        if os.stat(self.file).st_size == 0:
+            self.isEmpty = True
+            return
         with open(self.file, 'r') as filehandler:
             data = filehandler.read()
         qdata = data.split()
@@ -34,9 +39,13 @@ class Question:
         elif qdata[0] == 'Quelle' and qdata[1] == 'salle' and qdata[2] == 'obscurcir':
             self.type = TYPE.GRAY_POWER
         else:
-            self.type = TYPE.PURPLE_POWER 
+            self.type = TYPE.PURPLE_POWER
+        with open(self.file, 'w') as filehandler:
+            filehandler.seek(0)
+            filehandler.truncate()
 if __name__=="__main__":
     question = Question('../0/questions.txt')
     question.read()
     print(question.type)
     print(question.args)
+    print(question.isEmpty)
