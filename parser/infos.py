@@ -1,15 +1,26 @@
 import re
+from time import sleep
+
 import game.characters as characters
 
+def read_file(file, wait=True, readline=False) -> str:
+    while wait:
+        with open(file, 'r') as fhandler:
+            if readline:
+                data = fhandler.readline()
+            else:
+                data = fhandler.read()
+        if data:
+            wait = False
+        sleep(0.1)
+    return data
 
-
-def ghost_color():
-    with open('1/infos.txt', 'r') as fhandler:
-        data = fhandler.readline()
+def ghost_color() -> str:
+    data = read_file('1/infos.txt', readline=True)
     color = data.split()[-1]
-    print(f"Le fantome est {color}")
+    return color
 
-def parse_events(events):
+def parse_events(events) -> tuple:
     tour = int(re.findall("Tour:([0-9]+),", events)[0])
     score = int(re.findall("Score:([0-9]+)/", events)[0])
     ombre = int(re.findall("Ombre:([0-9]),", events)[0])
@@ -17,13 +28,8 @@ def parse_events(events):
     return tour, score, ombre, bloque
 
 def current_turn_infos(role):
-    waiting = True
-    while waiting:
-        with open(f'{role}/infos.txt', 'r') as fhandler:
-            data = fhandler.read()
-        if data:
-            waiting = False
-        turns = data.split('**************************\n')
+    data = read_file(f'{role}/infos.txt')
+    turns = data.split('**************************\n')
     if role == 0:
         turns.pop(0)
     current_turn = turns[-1].split('\n')

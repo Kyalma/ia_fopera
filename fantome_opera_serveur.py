@@ -11,6 +11,13 @@ couleurs = avant | permanents | apres | deux
 passages = [{1,4},{0,2},{1,3},{2,7},{0,5,8},{4,6},{5,7},{3,6,9},{4,9},{7,8}]
 pass_ext = [{1,4},{0,2,5,7},{1,3,6},{2,7},{0,5,8,9},{4,6,1,8},{5,7,2,9},{3,6,9,1},{4,9,5},{7,8,4,6}]
 
+meta_files = [
+    '0/infos.txt',
+    '0/questions.txt',
+    '1/infos.txt',
+    '1/questions.txt'
+]
+
 def message(texte,jos):
     for j in jos:
         f = open("./"+str(j.numero)+"/infos.txt","a")
@@ -42,7 +49,7 @@ class personnage:
     def __repr__(self):
         susp = "-suspect" if self.suspect else "-clean"
         return self.couleur + "-" + str(self.position) + susp
-            
+
 class joueur:
     def __init__(self,n):
         self.numero = n
@@ -114,7 +121,7 @@ class joueur:
                     informer("REPONSE INTERPRETEE : "+str({x,y}))       
                     party.bloque = {x,y}
         return [p]
-                    
+
     def bouger(self,p,avec,bloque):
         pass_act = pass_ext if p.couleur == 'rose' else passages
         if p.couleur != 'violet' or p.pouvoir:
@@ -145,7 +152,7 @@ class partie:
         message("!!! Le fantôme est : "+self.fantome.couleur,[self.joueurs[1]])
         self.cartes.remove(self.fantome)
         self.cartes += ['fantome']*3
-        
+
         shuffle(self.tuiles)
         shuffle(self.cartes)
         for i,p in enumerate(self.tuiles):
@@ -175,7 +182,7 @@ class partie:
                     for p in gens:
                         p.suspect = False
         self.start += len([p for p in self.personnages if p.suspect])
-            
+
     def tour(self):
         informer("**************************\n" + str(self))
         self.actions()
@@ -191,7 +198,13 @@ class partie:
     def __repr__(self):
         return "Tour:" + str(self.num_tour) + ", Score:"+str(self.start)+"/"+str(self.end) + ", Ombre:" + str(self.shadow) + ", Bloque:" + str(self.bloque) +"\n" + "  ".join([str(p) for p in self.personnages])
 
+def flush_metafiles():
+    for filename in meta_files:
+        with open(filename, 'w'):
+            pass
+
 if __name__ == "__main__":
+    flush_metafiles()
     joueurs = [joueur(0),joueur(1)]
     inspecteur0 = Inspecteur()
     fantome1 = Fantome()

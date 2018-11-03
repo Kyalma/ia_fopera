@@ -8,4 +8,5 @@ class   Fantome(Joueur):
 
     def lancer(self):
         self.color = ghost_color()
+        print("Fantome debug: Je suis " + self.color)
         pass
