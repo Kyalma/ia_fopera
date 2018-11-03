@@ -1,21 +1,12 @@
 import re
 import game.characters as characters
 
-suspects = {
-    'marron': characters.Brown(),
-    'rose': characters.Pink(),
-    'noir': characters.Black(),
-    'rouge': characters.Red(),
-    'bleu': characters.Blue(),
-    'blanc': characters.White(),
-    'violet': characters.Violet(),
-    'gris': characters.Grey()
-}
+
 
 def ghost_color():
-    with open('../1/infos.txt', 'r') as fhandler:
+    with open('1/infos.txt', 'r') as fhandler:
         data = fhandler.readline()
-    *__ , color = data.split()
+    color = data.split()[-1]
     print(f"Le fantome est {color}")
 
 def parse_events(events):
@@ -26,8 +17,13 @@ def parse_events(events):
     return tour, score, ombre, bloque
 
 def current_turn_infos(role):
-    with open(f'{role}/infos.txt', 'r') as fhandler:
-        turns = fhandler.read().split('**************************\n')
+    waiting = True
+    while waiting:
+        with open(f'{role}/infos.txt', 'r') as fhandler:
+            data = fhandler.read()
+        if data:
+            waiting = False
+        turns = data.split('**************************\n')
     if role == 0:
         turns.pop(0)
     current_turn = turns[-1].split('\n')
@@ -35,7 +31,7 @@ def current_turn_infos(role):
     status = current_turn[1].split()
     subs_current = turns[-1].split('****\n')
     subs_current.pop(0)
-    for sub in subs_current:
+    for i, sub in enumerate(subs_current):
         for line in sub.split('\n'):
             if line.startswith("NOUVEAU PLACEMENT : "):
                 new_pos = line[20:]
@@ -44,13 +40,3 @@ def current_turn_infos(role):
                         status[i] = new_pos
             # Add new features here for parsing each turn
     return events, status
-
-
-if __name__ == "__main__":
-    events, status = current_turn_infos(0)
-    print(status)
-    for suspect in status:
-        suspects[suspect[:suspect.find('-')]].update(suspect)
-
-    for color, suspect in suspects.items():
-        print(suspect, end='\n')
