@@ -1,3 +1,4 @@
+from game import characters
 
 class   Joueur():
     def __init__(self, id):

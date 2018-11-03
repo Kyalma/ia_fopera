@@ -28,9 +28,9 @@ class Question:
             self.args = data[data.find('[')+1:data.find(']')].split(', ')        
         elif qdata[0] == 'Quelle' and qdata[1] == 'salle' and qdata[2] == 'bloquer':
             self.type = TYPE.BLUE_POWER
+            self.args = data[data.find('{')+1:data.find('}')].split(', ')
         elif qdata[0] == 'Quelle' and qdata[1] == 'sortie':
             self.type = TYPE.BLUE_POWER_EXIT
-            self.args = data[data.find('{')+1:data.find('}')].split(', ')
         elif qdata[0] == 'Quelle' and qdata[1] == 'salle' and qdata[2] == 'obscurcir':
             self.type = TYPE.GRAY_POWER
         else:
