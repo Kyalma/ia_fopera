@@ -1,7 +1,8 @@
-from time import sleep
+import time
+
 from .joueur import Joueur
 from parser.infos import ghost_color
-from parser.read_question import TYPE
+from parser.read_question import Type
 
 class   Fantome(Joueur):
     def __init__(self):
@@ -13,7 +14,7 @@ class   Fantome(Joueur):
         print("Fantome debug: Je suis " + self.color)
         while not self.game_over:
             self.question.read()
-            if self.question.type == TYPE.DRAW:
+            if self.question.type == Type.DRAW:
                 print(self.question.args)
                 pass
-            sleep(1)
+            time.sleep(1)

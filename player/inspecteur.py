@@ -1,6 +1,8 @@
+import time
 from .joueur import Joueur
 from parser.infos import current_turn_infos
-from parser.read_question import TYPE
+from parser.read_question import Type
+
 
 class   Inspecteur(Joueur):
     def __init__(self):
@@ -12,7 +14,7 @@ class   Inspecteur(Joueur):
             for suspect in status:
                 self.suspects[suspect[:suspect.find('-')]].update(suspect)
             self.question.read()
-            if self.question.type == TYPE.DRAW:
+            if self.question.type == Type.DRAW:
                 print(self.question.args)
                 pass
-            sleep(1)
+            time.sleep(1)
