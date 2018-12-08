@@ -1,4 +1,5 @@
 from game import characters
+from parser.infos import current_turn_infos
 from parser.read_question import Question
 
 class   Joueur():
@@ -16,6 +17,13 @@ class   Joueur():
         }
         self.question = Question(f'{self.id}/questions.txt')
         self.game_over = False
+
+    def init_turn(self):
+        events, status = current_turn_infos(self.id)
+        for suspect in status:
+            self.suspects[suspect[:suspect.find('-')]].update(suspect)
+        pass
+
 
     def lancer(self):
         raise NotImplementedError()
