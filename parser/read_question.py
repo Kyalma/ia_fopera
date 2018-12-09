@@ -18,25 +18,17 @@ class Question:
         self.args = None
         self.isEmpty = False
 
-    def read(self, wait=True):
-        while os.stat(self.file).st_size == 0:
-            self.isEmpty = True
-            if not wait:
-                return
-            sleep(0.01)
-        self.isEmpty = False
-        with open(self.file, 'r') as filehandler:
-            data = filehandler.read()
+    def parse_question(self, data: str):
         qdata = data.split()
         if qdata[0] == 'Voulez-vous':
             print('0')
             self.type = Type.POWER
         elif qdata[0] == 'positions':
             self.type = Type.POSITION
-            self.args = data[data.find('{')+1:data.find('}')].split(', ') 
+            self.args = data[data.find('{')+1:data.find('}')].split(', ')
         elif qdata[0] == 'Tuiles':
             self.type = Type.DRAW
-            self.args = data[data.find('[')+1:data.find(']')].split(', ')        
+            self.args = data[data.find('[')+1:data.find(']')].split(', ')
         elif qdata[0] == 'Quelle' and qdata[1] == 'salle' and qdata[2] == 'bloquer':
             self.type = Type.BLUE_POWER
             self.args = data[data.find('{')+1:data.find('}')].split(', ')
@@ -46,6 +38,18 @@ class Question:
             self.type = Type.GRAY_POWER
         else:
             self.type = Type.PURPLE_POWER
+
+
+    def read(self, wait=True):
+        while os.stat(self.file).st_size == 0:
+            self.isEmpty = True
+            if not wait:
+                return
+            sleep(0.01)
+        self.isEmpty = False
+        with open(self.file, 'r') as filehandler:
+            data = filehandler.read()
+        self.parse_question(data)
         with open(self.file, 'w') as filehandler:
             filehandler.seek(0)
             filehandler.truncate()
