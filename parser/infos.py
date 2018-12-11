@@ -2,6 +2,7 @@ import re
 from time import sleep
 from parser.read_question import Question, Type
 
+from game.turn import Turn
 import game.characters as characters
 
 def read_file(file, wait=True, readline=False) -> str:
@@ -50,42 +51,57 @@ def current_turn_infos(role):
 
 def all_turns(role: int) -> list:
     all_turns_info = list()
+    subturn_counter = 0
     question = Question(None)
     data = read_file(f'{role}/infos.txt')
     turns = data.split('**************************\n')
     turns.pop(0)
     for big_turn in turns:
         turn_meta = big_turn.split('\n', 2)
-        big_events = parse_events(turn_meta[0])
+        turn_data = Turn(*parse_events(turn_meta[0]))
         suspects = turn_meta[1].split()
         sub_turns = big_turn.split('****\n')
         sub_turns.pop(0)
         for sub_turn in sub_turns:
             turn_info = dict()
-            turn_info['tour'] = big_events[0]
-            turn_info['score'] = big_events[1]
-            turn_info['ombre'] = big_events[2]
-            turn_info['bloqué'] = big_events[3]
+            turn_info['tour'] = turn_data.tour
+            turn_info['score'] = turn_data.score
+            turn_info['ombre'] = turn_data.ombre
+            turn_info['bloqué'] = turn_data.bloque
             turn_info['suspects'] = suspects.copy()
+            turn_info['cri'] = 0 # Using int not bool for later learning
+            turn_info['pouvoir action'] = None
+            if subturn_counter > 3:
+                all_turns_info[subturn_counter - 4]['score fin'] = turn_data.score
             for line in sub_turn.split('\n'):
                 if line.startswith('QUESTION : '):
                     question.parse_question(line[11:])
                     if question.type == Type.DRAW:
                         next_value = 'personnage joué'
                     elif question.type == Type.POSITION:
-                        next_value = 'position'
+                        next_value = 'deplacement'
                     elif question.type == Type.POWER:
                         next_value = 'pouvoir utilisé'
                     else:
-                        next_value = 'autre'
+                        next_value = 'pouvoir action'
                 if line.startswith('REPONSE INTERPRETEE : '):
-                    turn_info[next_value] = line[22:]
+                    turn_info[next_value] = line[22:] if next_value != 'deplacement' else int(line[22:])
                 if line.startswith('NOUVEAU PLACEMENT : '):
                     nouveau_placement = line[20:]
                     for i, suspect in enumerate(suspects):
                         if suspect.startswith(nouveau_placement[:nouveau_placement.find('-')]):
                             suspects[i] = nouveau_placement
+                if line.startswith('le fantome frappe'):
+                    turn_info['cri'] = 1
+                # if line.startswith('Le fantôme'):
+                #     who_won = 1
+                # if line.startswith("L'enquêteur"):
+                #     who_won = 0
             all_turns_info.append(turn_info)
-            pass
-        pass
+            if turn_info['cri']:
+                for i in range(subturn_counter - 3, subturn_counter):
+                    all_turns_info[i]['cri'] = 1
+            subturn_counter += 1
+            # fin parsing tour joueur
+        # fin parsing tour global
     return all_turns_info
