@@ -13,12 +13,12 @@ class   CharacterChooseNetwork():
         [
             [4, 3, 0],       # 4 est la couleur du personnage traduite en chiffre (0 à 7)
             [2, 3, 1],       # 3 est la position du personnage sur le plateau
-            [1, 2, 1],       # 1 est le status du personnage, 0 = suspect, 1 = innocenté
+            [5, 2, 1],       # 1 est le status du personnage, 0 = suspect, 1 = innocenté
             [-1, -1, -1]     # -1 signifie qu'il n'y a pas de personnage à jouer
         ]
     Le modèle produit en output le score estimé en fin de tour pour avoir joué le personnage en question
     Par exemple:
-        [0, 0, -1, 0]        # les valeurs des scores sont toujours négatives
+        [1, 2, 3, 0]        # les valeurs des scores sont inversées (car softmax > 0)
     """
     def __init__(self):
         self.model = Sequential()
