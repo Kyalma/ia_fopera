@@ -26,4 +26,4 @@ class   Logger():
         if not os.path.isdir(self.log_dir):
             os.mkdir(self.log_dir)
         with open(f'{self.log_dir}/gamelog-{self.id}-{int(time.time())}.json', 'w+') as fhandler:
-            json.dump(dict(data=self._log), fhandler)
+            ret = json.dump(dict(turns=self._log), fhandler)
