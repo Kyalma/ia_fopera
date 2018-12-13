@@ -216,6 +216,8 @@ if __name__ == "__main__":
     joueurs = [joueur(0),joueur(1)]
     inspecteur0 = Inspecteur()
     fantome1 = Fantome()
-    Thread(target=inspecteur0.lancer).start()
-    Thread(target=fantome1.lancer).start()
+    # Thread(target=inspecteur0.lancer).start()
+    # Thread(target=fantome1.lancer).start()
+    Thread(target=dummy0.lancer).start()
+    Thread(target=dummy1.lancer).start()
     partie(joueurs).lancer()

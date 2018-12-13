@@ -1,4 +1,7 @@
+import os
+import time
 import datetime
+
 from keras.models import Sequential
 from keras.layers import Dense, Conv2D, Activation, Flatten, MaxPooling2D, Dropout
 from keras.optimizers import Adam, RMSprop
@@ -23,16 +26,18 @@ class   CharacterChooseNetwork():
     def __init__(self):
         self.model = Sequential()
         self.model.add(
-            Dense(4, input_shape=(4, 3), activation='relu'))                # Dense
+            Dense(4, input_shape=(3, 1), activation='relu'))                # Dense
+        self.model.add(                                                     #  * relu
+            Dense(8, activation='relu'))                                      # Dense
         self.model.add(                                                     #  * relu
             Dense(8, activation='relu'))                                      # Dense
         self.model.add(                                                     #  * relu
             Flatten())                                                      # Flatten
         self.model.add(                                                     # Dense
-            Dense(4, activation='softmax', init='random_uniform'))          #  * softmax
+            Dense(8, activation='softmax', init='random_uniform'))          #  * softmax
         self.model.compile(loss='mse', optimizer='adam', metrics=['mae'])
 
-    def load(self, name: str=None):
+    def load(self, name: str='./'):
         if os.path.exists(name):
             self.model.load_weights(name)
             print("Loaded weights file successfully")
@@ -40,10 +45,7 @@ class   CharacterChooseNetwork():
             print("Weight file '{}' not found".format(name))
 
     def save(self, end_time: datetime.datetime):
-        self.model.save_weights("{}_{}it_{}.h5".format(
-            self.weights_file_basename,
-            self.iterations,
-            end_time.strftime("%m%d%H%M%S")))
+        self.model.save_weights(f"player_select-{time.time()}.h5")
 
     def summary(self) -> None:
         self.model.summary()

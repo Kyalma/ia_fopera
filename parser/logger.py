@@ -2,6 +2,8 @@ import os
 import json
 import time
 
+LOG_DIR = './log'
+
 class   Logger():
     """
     Get data from the text files and output a JSON file
@@ -9,21 +11,14 @@ class   Logger():
     easy to read
     """
     def __init__(self, player_id: int):
-        self.log_dir = './2'
-        self._log = list()
+        self._log = list()  # type: list
         self.id = player_id
-        self.current_turn = 0
-        self._log.append(dict())
 
-    def pass_turn(self):
-        self.current_turn += 1
-        self._log.append(dict())
-
-    def log(self, **kwargs):
-        self._log[self.current_turn].update(kwargs)
+    def log_turn(self, turn_data: dict):
+        self._log.append(turn_data)
 
     def save(self):
-        if not os.path.isdir(self.log_dir):
-            os.mkdir(self.log_dir)
-        with open(f'{self.log_dir}/gamelog-{self.id}-{int(time.time())}.json', 'w+') as fhandler:
+        if not os.path.isdir(LOG_DIR):
+            os.mkdir(LOG_DIR)
+        with open(f'{LOG_DIR}/gamelog-{self.id}-{int(time.time())}.json', 'w+') as fhandler:
             ret = json.dump(dict(turns=self._log), fhandler)
