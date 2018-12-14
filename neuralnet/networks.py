@@ -1,9 +1,10 @@
 import os
 import time
 import datetime
+import numpy
 
 from keras.models import Sequential
-from keras.layers import Dense, Conv2D, Activation, Flatten, MaxPooling2D, Dropout
+from keras.layers import Dense, Conv2D, Activation, Flatten, MaxPooling2D, Dropout, Conv1D
 from keras.optimizers import Adam, RMSprop
 
 
@@ -25,17 +26,21 @@ class   CharacterChooseNetwork():
     """
     def __init__(self):
         self.model = Sequential()
+        # self.model.add(
+        #     Conv1D(8, input_shape=(8, 3) , kernel_size=(1, ), activation='relu'  ))
         self.model.add(
-            Dense(4, input_shape=(3, 1), activation='relu'))                # Dense
+            Dense(8, input_shape=(8, 3), activation='relu'))                # Dense (* 8x3)
         self.model.add(                                                     #  * relu
-            Dense(8, activation='relu'))                                      # Dense
+            Dense(8, activation='relu'))                                    # Dense
+        self.model.add(                                                     # Dropout 10%
+            Dropout(0.1))
         self.model.add(                                                     #  * relu
-            Dense(8, activation='relu'))                                      # Dense
+            Dense(8, activation='relu'))                                    # Dense
         self.model.add(                                                     #  * relu
             Flatten())                                                      # Flatten
         self.model.add(                                                     # Dense
             Dense(8, activation='softmax', init='random_uniform'))          #  * softmax
-        self.model.compile(loss='mse', optimizer='adam', metrics=['mae'])
+        self.model.compile(loss='mse', optimizer='adam', metrics=['mae', 'mse'])
 
     def load(self, name: str='./'):
         if os.path.exists(name):
@@ -44,11 +49,15 @@ class   CharacterChooseNetwork():
         else:
             print("Weight file '{}' not found".format(name))
 
-    def save(self, end_time: datetime.datetime):
-        self.model.save_weights(f"player_select-{time.time()}.h5")
+    def save(self):
+        self.model.save_weights(f"data/player_select-{time.time()}.h5")
 
     def summary(self) -> None:
         self.model.summary()
 
-model = CharacterChooseNetwork()
-model.summary()
+    def train(self, input_x, target_y) -> None:
+        prediction = self.model.predict(input_x)
+        for i in range(0, prediction.shape[0]):
+            index = numpy.argmax(target_y[i])
+            prediction[i][index] = target_y[i][index]
+        self.model.fit(input_x, prediction, epochs=32, verbose=0)
