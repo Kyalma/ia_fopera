@@ -1,24 +1,10 @@
 import os
 import json
+from neuralnet.networks import CHARACTER_VAL, STATUS_VAL
 
 LOG_DATA_DIR = './log'
 OUTPUT_DIR = './data'
 
-CHARACTER_VAL = {
-    'marron': 0,
-    'rose': 1,
-    'noir': 2,
-    'rouge': 3,
-    'bleu': 4,
-    'blanc': 5,
-    'violet': 6,
-    'gris': 7
-}
-
-STATUS_VAL = {
-    'suspect': 0,
-    'clean': 1
-}
 
 def main():
     if not os.path.isdir(OUTPUT_DIR):

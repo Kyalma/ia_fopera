@@ -8,6 +8,22 @@ from keras.layers import Dense, Conv2D, Activation, Flatten, MaxPooling2D, Dropo
 from keras.optimizers import Adam, RMSprop
 
 
+CHARACTER_VAL = {
+    'marron': 0,
+    'rose': 1,
+    'noir': 2,
+    'rouge': 3,
+    'bleu': 4,
+    'blanc': 5,
+    'violet': 6,
+    'gris': 7
+}
+
+STATUS_VAL = {
+    'suspect': 0,
+    'clean': 1
+}
+
 
 class   CharacterChooseNetwork():
     """
