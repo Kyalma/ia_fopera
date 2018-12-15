@@ -11,6 +11,7 @@ class Type(Enum):
     BLUE_POWER = 5
     BLUE_POWER_EXIT = 6
 
+
 class Question:
     def __init__(self, file):
         self.file = file
@@ -40,13 +41,14 @@ class Question:
             self.type = Type.PURPLE_POWER
 
 
-    def read(self, wait=True):
+    def read(self, wait=True, timeout=1):
+        sleep_interval = 0.05
+        elapsed = 0
         while os.stat(self.file).st_size == 0:
-            self.isEmpty = True
-            if not wait:
+            if sleep_interval * elapsed >= timeout or not wait:
                 return
-            sleep(0.01)
-        self.isEmpty = False
+            sleep(sleep_interval)
+            elapsed += 1
         with open(self.file, 'r') as filehandler:
             data = filehandler.read()
         self.parse_question(data)

@@ -6,6 +6,7 @@ from parser.read_question import Question, Type
 from game.turn import Turn
 import game.characters as characters
 
+
 def read_file(file, wait=True, readline=False) -> str:
     while wait:
         with open(file, 'r') as fhandler:
@@ -106,3 +107,10 @@ def all_turns(role: int) -> list:
             # fin parsing tour joueur
         # fin parsing tour global
     return all_turns_info
+
+
+def game_over(role: int) -> bool:
+    with open(f"./{role}/infos.txt", 'r') as fhandler:
+        data = fhandler.read()
+        last_line = data.split('\n')[-2]
+    return True if last_line.startswith('Score final') else False
