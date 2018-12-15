@@ -24,13 +24,10 @@ class   Joueur():
         events, positions = current_turn_infos(self.id)
         for suspect in positions:
             self.suspects[suspect[:suspect.find('-')]].update(suspect)
-        self.logger.log(
-            tour=events[0],
-            score=events[1],
-            ombre=events[2],
-            bloqué=events[3],
-            suspects=self.suspects
-        )
 
     def lancer(self):
         raise NotImplementedError()
+
+    def act(self, answer):
+        with open(f'{self.id}/reponses.txt', 'w') as fhandler:
+            fhandler.write(str(answer))
