@@ -1,9 +1,9 @@
 .mypy_cache
 *.pyc
-*.txt
 *.vscode
-*.txt
 2/
 3/
 venv/
 log/
+*.txt
+!requirements.txt
