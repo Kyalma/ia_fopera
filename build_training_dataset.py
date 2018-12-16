@@ -1,3 +1,7 @@
+"""
+Récupère tout les fichers log pour créer un seul fichier .json
+"""
+
 import os
 import json
 from neuralnet.networks import CHARACTER_VAL, STATUS_VAL

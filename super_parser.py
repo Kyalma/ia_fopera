@@ -1,3 +1,8 @@
+"""
+Note: Pour utiliser le super parser correctement, lancer le script après
+chaque partie.
+"""
+
 from parser.logger import Logger
 from parser.infos import all_turns
 
