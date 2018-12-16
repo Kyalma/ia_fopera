@@ -68,7 +68,7 @@ class CharacterChooseNetwork():
             print(f"Weight file '{name}' not found")
 
     def save(self):
-        self.model.save_weights(f"data/player_select-{int(time.time())}.h5")
+        self.model.save_weights(f"data/player_select.h5")
 
     def summary(self) -> None:
         self.model.summary()
@@ -78,7 +78,7 @@ class CharacterChooseNetwork():
         for i in range(0, prediction.shape[0]):
             index = numpy.argmax(target_y[i])
             prediction[i][index] = target_y[i][index]
-        self.model.fit(input_x, prediction, epochs=32, verbose=0)
+        self.model.fit(input_x, prediction, epochs=32, verbose=1)
 
     def select_character(self, player_id: int, suspects: list,
                          available: list) -> int:
