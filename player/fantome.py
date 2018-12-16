@@ -4,7 +4,11 @@ from .joueur import Joueur
 from parser.infos import ghost_color
 from parser.read_question import Type
 
-class   Fantome(Joueur):
+
+class Fantome(Joueur):
+    """
+    IA du Fantôme
+    """
     def __init__(self):
         super().__init__(1)
         self.color = None

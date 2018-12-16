@@ -3,7 +3,11 @@ from parser.infos import current_turn_infos
 from parser.read_question import Question
 from parser.logger import Logger
 
-class   Joueur():
+
+class Joueur():
+    """
+    Classe abstraite pour la création d'une IA de joueur
+    """
     def __init__(self, player_id: int):
         self.id = player_id
         self.suspects = {

@@ -1,6 +1,7 @@
 from parser.logger import Logger
 from parser.infos import all_turns
 
+
 def main():
     # for player_id, filepath in ((0, '0/infos.txt'), (1, ('1/infos.txt'))):
     for player_id, filepath in ((0, '0/infos.txt'), ):

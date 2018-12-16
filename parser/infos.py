@@ -19,17 +19,21 @@ def read_file(file, wait=True, readline=False) -> str:
         sleep(0.1)
     return data
 
+
 def ghost_color() -> str:
     data = read_file('1/infos.txt', readline=True)
     color = data.split()[-1]
     return color
 
+
 def parse_events(events) -> tuple:
     tour = int(re.findall("Tour:([0-9]+),", events)[0])
     score = int(re.findall("Score:([0-9]+)/", events)[0])
     ombre = int(re.findall("Ombre:([0-9]),", events)[0])
-    bloque = tuple(int(pos) for pos in re.findall("Bloque:{([0-9]), ([0-9])}", events)[0])
+    bloque = tuple(int(pos) for pos in re.findall(
+        "Bloque:{([0-9]), ([0-9])}", events)[0])
     return tour, score, ombre, bloque
+
 
 def current_turn_infos(role):
     data = read_file(f'{role}/infos.txt')
@@ -51,6 +55,7 @@ def current_turn_infos(role):
             # Add new features here for parsing each turn
     return events, status
 
+
 def all_turns(role: int) -> list:
     all_turns_info = list()  # type: list
     subturn_counter = 0
@@ -71,10 +76,11 @@ def all_turns(role: int) -> list:
             turn_info['ombre'] = turn_data.ombre
             turn_info['bloqué'] = turn_data.bloque
             turn_info['suspects'] = suspects.copy()
-            turn_info['cri'] = 0 # Using int not bool for later learning
+            turn_info['cri'] = 0  # Using int not bool for later learning
             turn_info['pouvoir action'] = None
             if subturn_counter > 3:
-                all_turns_info[subturn_counter - 4]['score fin'] = turn_data.score
+                all_turns_info[
+                    subturn_counter - 4]['score fin'] = turn_data.score
             for line in sub_turn.split('\n'):
                 if line.startswith('QUESTION : '):
                     question.parse_question(line[11:])
@@ -85,13 +91,15 @@ def all_turns(role: int) -> list:
                         turn_info['tuiles'] = question.args
                         turn_info['perso joué'] = line[22:]
                     elif question.type == Type.POWER:
-                        turn_info['pouvoir utilisé'] = 0 if line[22:] == "False" else 1
+                        turn_info['pouvoir utilisé'] = 0 if (
+                            line[22:] == "False") else 1
                     else:
                         turn_info['pouvoir action'] = line[22:]
                 if line.startswith('NOUVEAU PLACEMENT : '):
                     nouveau_placement = line[20:]
                     for i, suspect in enumerate(suspects):
-                        if suspect.startswith(nouveau_placement[:nouveau_placement.find('-')]):
+                        if suspect.startswith(nouveau_placement[
+                                :nouveau_placement.find('-')]):
                             suspects[i] = nouveau_placement
                 if line.startswith('le fantome frappe'):
                     turn_info['cri'] = 1
