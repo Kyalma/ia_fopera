@@ -21,6 +21,6 @@ class Logger():
     def save(self):
         if not os.path.isdir(LOG_DIR):
             os.mkdir(LOG_DIR)
-        filaname = f'{LOG_DIR}/gamelog-{self.id}-{int(time.time())}.json'
+        filename = f'{LOG_DIR}/gamelog-{self.id}-{int(time.time())}.json'
         with open(filename, 'w') as fhandler:
             ret = json.dump(dict(turns=self._log), fhandler)

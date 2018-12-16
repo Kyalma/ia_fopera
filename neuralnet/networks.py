@@ -25,7 +25,27 @@ STATUS_VAL = {
 }
 
 
-class CharacterChooseNetwork():
+class BaseNetwork():
+    def __init__(self, weight_file: str):
+        self.weight_file = weight_file
+        self.graph = tensorflow.get_default_graph()
+        self.model = Sequential()
+
+    def summary(self) -> None:
+        self.model.summary()
+
+    def load(self):
+        if os.path.exists(self.weight_file):
+            self.model.load_weights(self.weight_file)
+            print("Loaded weights file successfully")
+        else:
+            print(f"Weight file '{self.weight_file}' not found")
+
+    def save(self):
+        self.model.save_weights(self.weight_file)
+
+
+class CharacterChooseNetwork(BaseNetwork):
     """
     Crée un modèle pour choisir un personnage à jouer en début de tour
     Le modèle reçoit en entrée une matrice numpy de taille (8, 3) comprenant
@@ -43,8 +63,7 @@ class CharacterChooseNetwork():
         [0.11, 0.10, 0.24, 0.03, ...]
     """
     def __init__(self):
-        self.graph = tensorflow.get_default_graph()
-        self.model = Sequential()
+        super().__init__('data/player_select.h5')
         self.model.add(
             Dense(8, input_shape=(8, 3), activation='relu'))    # Dense (* 8x3)
         self.model.add(                                         # * relu
@@ -59,19 +78,6 @@ class CharacterChooseNetwork():
             Dense(8, activation='softmax',                      # * softmax
                   kernel_initializer='random_uniform'))
         self.model.compile(loss='mse', optimizer='adam')
-
-    def load(self, name: str='./data/player_select.h5'):
-        if os.path.exists(name):
-            self.model.load_weights(name)
-            print("Loaded weights file successfully")
-        else:
-            print(f"Weight file '{name}' not found")
-
-    def save(self):
-        self.model.save_weights(f"data/player_select.h5")
-
-    def summary(self) -> None:
-        self.model.summary()
 
     def train(self, input_x, target_y) -> None:
         prediction = self.model.predict(input_x)

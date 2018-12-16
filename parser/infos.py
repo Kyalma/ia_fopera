@@ -82,6 +82,10 @@ def all_turns(role: int) -> list:
                 all_turns_info[
                     subturn_counter - 4]['score fin'] = turn_data.score
             for line in sub_turn.split('\n'):
+                if line.startswith("  Tour de l'"):
+                    turn_info['joueur'] = 0
+                if line.startswith("  Tour de le"):
+                    turn_info['joueur'] = 1
                 if line.startswith('QUESTION : '):
                     question.parse_question(line[11:])
                 if line.startswith('REPONSE INTERPRETEE : '):
