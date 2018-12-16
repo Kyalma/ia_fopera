@@ -120,5 +120,7 @@ def all_turns(role: int) -> list:
 def game_over(role: int) -> bool:
     with open(f"./{role}/infos.txt", 'r') as fhandler:
         data = fhandler.read()
-        last_line = data.split('\n')[-2]
+    if not data:
+        return False
+    last_line = data.split('\n')[-2]
     return True if last_line.startswith('Score final') else False
