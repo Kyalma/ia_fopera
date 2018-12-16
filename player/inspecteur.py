@@ -1,18 +1,32 @@
+import time
+import tensorflow
 from .joueur import Joueur
-from parser.infos import current_turn_infos
-from parser.read_question import TYPE
+from parser.read_question import Type
+from parser.infos import current_turn_infos, game_over
+from neuralnet.networks import CharacterChooseNetwork
+
 
 class   Inspecteur(Joueur):
     def __init__(self):
-        Joueur.__init__(self, 0)
+        super().__init__(0)
+        self.model = CharacterChooseNetwork()
+        self.model.load()
+        self.model = CharacterChooseNetwork()
+        self.model.load()
+
 
     def lancer(self):
         while not self.game_over:
-            events, status = current_turn_infos(self.id)
-            for suspect in status:
-                self.suspects[suspect[:suspect.find('-')]].update(suspect)
+            self.init_turn()
             self.question.read()
-            if self.question.type == TYPE.DRAW:
+            if self.question.type == Type.DRAW:
+                if len(self.question.args) == 1:
+                    self.act('0')
+                infos, suspects = current_turn_infos(self.id)
                 print(self.question.args)
-                pass
-            sleep(1)
+                to_play = self.model.select_character(self.id, suspects, self.question.args)
+                self.act(to_play)
+            else:
+                self.act('0')
+            if game_over(self.id):
+                self.game_over = True

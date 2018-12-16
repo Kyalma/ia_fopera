@@ -1,3 +1,4 @@
+import os
 from random import shuffle,randrange
 from time import sleep
 from threading import Thread
@@ -12,10 +13,14 @@ passages = [{1,4},{0,2},{1,3},{2,7},{0,5,8},{4,6},{5,7},{3,6,9},{4,9},{7,8}]
 pass_ext = [{1,4},{0,2,5,7},{1,3,6},{2,7},{0,5,8,9},{4,6,1,8},{5,7,2,9},{3,6,9,1},{4,9,5},{7,8,4,6}]
 
 meta_files = [
+    '0/inspecteur',
     '0/infos.txt',
     '0/questions.txt',
+    '0/reponses.txt',
+    '1/fantome',
     '1/infos.txt',
-    '1/questions.txt'
+    '1/questions.txt',
+    '1/reponses.txt'
 ]
 
 def message(texte,jos):
@@ -135,13 +140,13 @@ class joueur:
 
 class partie:
     def __init__(self,joueurs):
-        for i in [0,1]:
-            f = open("./" + str(i) + "/infos.txt","w")
-            f.close()
-            f = open("./" + str(i) + "/questions.txt","w")
-            f.close()
-            f = open("./" + str(i) + "/reponses.txt","w")
-            f.close()
+        # for i in [0,1]:
+        #     f = open("./" + str(i) + "/infos.txt","w")
+        #     f.close()
+        #     f = open("./" + str(i) + "/questions.txt","w")
+        #     f.close()
+        #     f = open("./" + str(i) + "/reponses.txt","w")
+        #     f.close()
         self.joueurs = joueurs
         self.start, self.end, self.num_tour, self.shadow, x = 4, 22, 1, randrange(10), randrange(10)
         self.bloque = {x,passages[x].copy().pop()}
@@ -199,8 +204,11 @@ class partie:
         return "Tour:" + str(self.num_tour) + ", Score:"+str(self.start)+"/"+str(self.end) + ", Ombre:" + str(self.shadow) + ", Bloque:" + str(self.bloque) +"\n" + "  ".join([str(p) for p in self.personnages])
 
 def flush_metafiles():
+    for dirname in ['./0', './1']:
+        if not os.path.isdir(dirname):
+            os.mkdir(dirname)
     for filename in meta_files:
-        with open(filename, 'w'):
+        with open(filename, 'w+'):
             pass
 
 if __name__ == "__main__":
@@ -208,6 +216,8 @@ if __name__ == "__main__":
     joueurs = [joueur(0),joueur(1)]
     inspecteur0 = Inspecteur()
     fantome1 = Fantome()
-    Thread(target=inspecteur0.lancer).start()
-    Thread(target=fantome1.lancer).start()
+    # Thread(target=inspecteur0.lancer).start()
+    # Thread(target=fantome1.lancer).start()
+    Thread(target=dummy0.lancer).start()
+    Thread(target=dummy1.lancer).start()
     partie(joueurs).lancer()
