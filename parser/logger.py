@@ -4,7 +4,8 @@ import time
 
 LOG_DIR = './log'
 
-class   Logger():
+
+class Logger():
     """
     Get data from the text files and output a JSON file
     at the end of game containing all the informations
@@ -20,5 +21,6 @@ class   Logger():
     def save(self):
         if not os.path.isdir(LOG_DIR):
             os.mkdir(LOG_DIR)
-        with open(f'{LOG_DIR}/gamelog-{self.id}-{int(time.time())}.json', 'w+') as fhandler:
+        filaname = f'{LOG_DIR}/gamelog-{self.id}-{int(time.time())}.json'
+        with open(filename, 'w') as fhandler:
             ret = json.dump(dict(turns=self._log), fhandler)

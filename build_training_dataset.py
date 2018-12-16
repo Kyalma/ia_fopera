@@ -23,7 +23,8 @@ def main():
                 input_x = list()
                 for character in turn['suspects']:
                     color, pos, status = character.split('-')
-                    input_x.append([CHARACTER_VAL[color], int(pos), STATUS_VAL[status]])
+                    input_x.append([CHARACTER_VAL[color], int(pos),
+                                   STATUS_VAL[status]])
                 input_x = sorted(input_x, key=lambda suspect: suspect[0])
                 training_dataset.append([input_x, target_y])
     with open(f"{OUTPUT_DIR}/training.json", 'w') as fhandler:

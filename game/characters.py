@@ -1,5 +1,5 @@
 
-class   Character():
+class Character():
     def __init__(self):
         self.status = 'suspect'
         self.color = None
@@ -15,49 +15,49 @@ class   Character():
         return f"{self.color}-{self.position}-{self.status}"
 
 
-class   Red(Character):
+class Red(Character):
     def __init__(self):
         super().__init__()
         self.color = 'rouge'
 
 
-class   Blue(Character):
+class Blue(Character):
     def __init__(self):
         super().__init__()
         self.color = 'bleu'
 
 
-class   Grey(Character):
+class Grey(Character):
     def __init__(self):
         super().__init__()
         self.color = 'gris'
 
 
-class   Black(Character):
+class Black(Character):
     def __init__(self):
         super().__init__()
         self.color = 'noir'
 
 
-class   Violet(Character):
+class Violet(Character):
     def __init__(self):
         super().__init__()
         self.color = 'violet'
 
 
-class   Pink(Character):
+class Pink(Character):
     def __init__(self):
         super().__init__()
         self.color = 'rose'
 
 
-class   White(Character):
+class White(Character):
     def __init__(self):
         super().__init__()
         self.color = 'blanc'
 
 
-class   Brown(Character):
+class Brown(Character):
     def __init__(self):
         super().__init__()
         self.color = 'marron'
