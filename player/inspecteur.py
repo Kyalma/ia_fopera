@@ -18,8 +18,6 @@ class Inspecteur(Joueur):
         super().__init__(0)
         self.model = CharacterChooseNetwork()
         self.model.load()
-        self.model = CharacterChooseNetwork()
-        self.model.load()
 
     def lancer(self):
         while not self.game_over:
